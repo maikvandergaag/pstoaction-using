@@ -1,0 +1,52 @@
+name: Repo standards
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  standards:
+    name: Check repository standards
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run repo standards check
+        id: standards
+        uses: maikvandergaag/pstoaction@v1
+        with:
+          path: .
+          required-files: |
+            README.md
+            LICENSE
+            .gitignore
+          required-readme-sections: |
+            Usage
+            License
+          forbidden-patterns: |
+            *.pfx
+            *.pem
+          fail-on-error: 'true'
+          job-summary: 'true'
+          report-path: repo-standards.json
+
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: repo-standards-report
+          path: repo-standards.json
+          if-no-files-found: ignore
+
+      - name: Show result
+        if: always()
+        run: |
+          echo "Result: ${{ steps.standards.outputs.result }}"
+          echo "Passed: ${{ steps.standards.outputs.checks-passed }} / ${{ steps.standards.outputs.checks-total }}"
