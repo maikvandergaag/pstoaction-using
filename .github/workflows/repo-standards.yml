@@ -27,6 +27,7 @@ jobs:
             README.md
             LICENSE
             .gitignore
+            CODEOWNERS
           required-readme-sections: |
             Usage
             License
