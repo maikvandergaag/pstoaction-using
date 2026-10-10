@@ -20,7 +20,7 @@ jobs:
 
       - name: Run repo standards check
         id: standards
-        uses: maikvandergaag/pstoaction@v1
+        uses: maikvandergaag/pstoaction@v1.0
         with:
           path: .
           required-files: |
